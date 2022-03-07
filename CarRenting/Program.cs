@@ -1,4 +1,5 @@
 using CarRenting.Data;
+using CarRenting.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +22,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddEntityFrameworkStores<CarRentingDbContext>();
 builder.Services.AddControllersWithViews();
 
+
 var app = builder.Build();
+
+// Auto migration on DB if DbContext have changes
+app.PrepareDatabase();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
