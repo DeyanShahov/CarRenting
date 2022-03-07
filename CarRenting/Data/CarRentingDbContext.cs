@@ -12,5 +12,7 @@ namespace CarRenting.Data
         }
 
         public DbSet<Car> Cars { get; init; }
+
+        public DbSet<Category> Categories { get; init; }
     }
 }
