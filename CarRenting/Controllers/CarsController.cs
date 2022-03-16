@@ -13,7 +13,7 @@ namespace CarRenting.Controllers
         {
             this.data = data;
         }
-        //public IActionResult Add() => View();
+
         public IActionResult Add() => View(new AddCarFormModel
         {
             Categories = this.GetCarCategories()
@@ -50,7 +50,29 @@ namespace CarRenting.Controllers
 
             data.SaveChanges();
             
-            return RedirectToAction("Index", "Home");        
+            //return RedirectToAction("Index", "Home");        
+            return RedirectToAction(nameof(All));
+        }
+
+
+        public IActionResult All()
+        {
+            var Cars = this.data
+                .Cars
+                .OrderByDescending(c => c.Id )
+                .Select(c => new CarListingViewModel
+                {
+                    Id = c.Id,
+                    Brand = c.Brand,
+                    Model = c.Model,
+                    Year = c.Year,
+                    Description = c.Description,
+                    ImageUrl = c.ImageUrl,
+                    Category = c.Category.Name
+                })
+                .ToList();
+
+            return View(Cars);
         }
 
         private IEnumerable<CarCategoryViewModel> GetCarCategories()
