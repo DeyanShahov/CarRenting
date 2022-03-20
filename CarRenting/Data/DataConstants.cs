@@ -16,7 +16,9 @@
         
         public class Dealer
         {
+            public const int DealerNameMinLength = 2;
             public const int DealerNameMaxLength = 30;
+            public const int DealerPhoneMinLength = 6;
             public const int DealerPhoneMaxLength = 30;
         }
 
