@@ -1,5 +1,7 @@
 using CarRenting.Data;
 using CarRenting.Infrastructure;
+using CarRenting.Services.Cars;
+using CarRenting.Services.Statistics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +27,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddEntityFrameworkStores<CarRentingDbContext>();
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddTransient<IStatisticsService, StatisticsService>();
+builder.Services.AddTransient<ICarSevice, CarService>();
 
 builder.Services.AddControllersWithViews(options =>
 {
