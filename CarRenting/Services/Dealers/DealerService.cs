@@ -20,6 +20,6 @@ namespace CarRenting.Services.Dealers
                 .FirstOrDefault();
         }
 
-        public bool IsDealer(string userId) => data.Dealers.All(d => d.UserId == userId);
+        public bool IsDealer(string userId) => data.Dealers.Any(d => d.UserId == userId);
     }
 }
