@@ -11,10 +11,32 @@ namespace CarRenting.Services.Cars
             int currentPage,
             int carsPerPage);
 
+        CarDetailsServiceModel Details(int carId);
+
         IEnumerable<CarServiceModel> ByUser(string userId);
 
         IEnumerable<string> AllCarBrands();
 
         IEnumerable<CarCategoryServiceModel> AllCarCategories();
+
+        bool IsByDealer(int carId, int dealerId);
+
+        bool CategoryExists(int categoriId);
+
+        int Create(string brand,
+                string model,
+                string description,
+                string imageUrl,
+                int year,
+                int categoryId,
+                int dealerId);
+
+        bool Edit(int carId,
+                string brand,
+                string model,
+                string description,
+                string imageUrl,
+                int year,
+                int categoryId);
     }
 }

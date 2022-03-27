@@ -33,7 +33,7 @@ namespace CarRenting.Controllers
                 return RedirectToAction(nameof(DealersController.Become), "Dealers");
             }
 
-            return View(new AddCarFormModel
+            return View(new CarFormModel
             {
                 Categories = this.carSevice.AllCarCategories()
             }); ;
@@ -41,13 +41,9 @@ namespace CarRenting.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddCarFormModel carModel)
+        public IActionResult Add(CarFormModel carModel)
         {
-            var dealerId = data
-                .Dealers
-                .Where(d => d.UserId == this.User.FindFirst(ClaimTypes.NameIdentifier).Value)
-                .Select(d => d.Id)
-                .FirstOrDefault();
+            var dealerId = this.dealerSevice.GetIdByUser(User.GetId());
 
             if (!dealerSevice.IsDealer(User.GetId()))
             {
@@ -55,7 +51,7 @@ namespace CarRenting.Controllers
             }
 
 
-            if (!data.Categories.Any(c => c.Id == carModel.CategoryId))
+            if (!carSevice.CategoryExists(carModel.CategoryId))
             {
                 ModelState.AddModelError(nameof(carModel.CategoryId), "Category");
             }
@@ -68,21 +64,8 @@ namespace CarRenting.Controllers
                 return View(carModel);
             }
 
-
-            var car = new Car
-            {
-                Brand = carModel.Brand,
-                Model = carModel.Model,
-                Description = carModel.Description,
-                ImageUrl = carModel.ImageUrl,
-                Year = carModel.Year,
-                CategoryId = carModel.CategoryId,
-                DealerId = dealerId,
-            };
-
-            data.Cars.Add(car);
-
-            data.SaveChanges();
+            carSevice.Create(carModel.Brand, carModel.Model, carModel.Description,
+                carModel.ImageUrl, carModel.Year, carModel.CategoryId, dealerId);
 
             //return RedirectToAction("Index", "Home");        
             return RedirectToAction(nameof(All));
@@ -116,11 +99,77 @@ namespace CarRenting.Controllers
             return View(myCars);
         }
 
-        [Authorize]
-        public IActionResult Edit()
+    
+        public IActionResult Edit(int id)
         {
+            var userId = User.GetId();
 
+            // proverka dali smeDilari vaobshte
+            if (!dealerSevice.IsDealer(userId))
+            {
+                return RedirectToAction(nameof(DealersController.Become), "Dealers");
+            }
+
+            var car = carSevice.Details(id);
+
+            // proverka dali dadenata kola e moq za da moga da q promenqm
+            if (car.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            return View(new CarFormModel
+            {
+                Brand = car.Brand,
+                Model = car.Model,
+                Description = car.Description,
+                ImageUrl = car.ImageUrl,
+                Year = car.Year,
+                CategoryId = car.CategoryId,        
+                Categories = this.carSevice.AllCarCategories()
+            });
         }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, CarFormModel carModel)
+        {
+            var dealerId = this.dealerSevice.GetIdByUser(User.GetId());
+
+            //proverka dali e dilar potrebitelq
+            if (!dealerSevice.IsDealer(User.GetId()))
+            {
+                return RedirectToAction(nameof(DealersController.Become), "Dealers");
+            }
+
+            //proverka ima li takava kategoriq
+            if (!carSevice.CategoryExists(carModel.CategoryId))
+            {
+                ModelState.AddModelError(nameof(carModel.CategoryId), "Category");
+            }
+
+            //proverka na popalnenite danni
+            if (!ModelState.IsValid)
+            {
+                carModel.Categories = this.carSevice.AllCarCategories();
+
+                return View(carModel);
+            }
+
+            //proverka dali dilara ima pravo da promenq tochno tazi kola, tq ot neegovite koli li e ?
+            if (!carSevice.IsByDealer(id, dealerId))
+            {
+                return BadRequest();
+            }
+
+            carSevice.Edit(id, carModel.Brand, carModel.Model, carModel.Description,
+                carModel.ImageUrl, carModel.Year, carModel.CategoryId);
+
+          
+            return RedirectToAction(nameof(All));
+        }
+
+     
 
     }
 }

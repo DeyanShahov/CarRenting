@@ -11,6 +11,15 @@ namespace CarRenting.Services.Dealers
             this.data = data;
         }
 
+        public int GetIdByUser(string userId)
+        {
+            return data
+                .Dealers
+                .Where(d => d.UserId == userId)
+                .Select(d => d.Id)
+                .FirstOrDefault();
+        }
+
         public bool IsDealer(string userId) => data.Dealers.All(d => d.UserId == userId);
     }
 }

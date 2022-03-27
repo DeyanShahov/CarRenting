@@ -44,7 +44,7 @@ namespace CarRenting.Services.Cars
             var cars = GetCars(carsQuery
                 .Skip((currentPage - 1) * carsPerPage)
                 .Take(carsPerPage));
-                
+
 
             return new CarQueryServiceModel
             {
@@ -82,7 +82,7 @@ namespace CarRenting.Services.Cars
                     Model = c.Model,
                     Year = c.Year,
                     ImageUrl = c.ImageUrl,
-                    Category = c.Category.Name
+                    CategoryName = c.Category.Name
                 })
                 .ToList();
         }
@@ -97,6 +97,85 @@ namespace CarRenting.Services.Cars
                         Name = c.Name,
                     })
                     .ToList();
+        }
+
+        public CarDetailsServiceModel Details(int id)
+        {
+            return data
+                .Cars
+                .Where(c => c.Id == id)
+                .Select(c => new CarDetailsServiceModel
+                {
+                    Id = c.Id,
+                    Brand = c.Brand,
+                    Model = c.Model,
+                    Year = c.Year,
+                    ImageUrl = c.ImageUrl,
+                    CategoryName = c.Category.Name,
+                    Description = c.Description,
+                    DealerId = c.DealerId,
+                    DealerName = c.Dealer.Name,
+                    UserId = c.Dealer.UserId
+
+                })
+                .FirstOrDefault();
+        }
+
+        public bool CategoryExists(int categoriId)
+        {
+            return data.Categories.Any(c => c.Id == categoriId);
+        }
+
+        public int Create(string brand, string model, string description, string imageUrl, int year, int categoryId, int dealerId)
+        {
+            var car = new Car
+            {
+                Brand = brand,
+                Model = model,
+                Description = description,
+                ImageUrl = imageUrl,
+                Year = year,
+                CategoryId = categoryId,
+                DealerId = dealerId,
+            };
+
+            data.Cars.Add(car);
+
+            data.SaveChanges();
+
+            return car.Id;
+        }
+
+        public bool Edit(int id, string brand, string model, string description, string imageUrl, int year, int categoryId)
+        {
+            //namiram kolata v bazata po podadenoto id
+            var car = data.Cars.FirstOrDefault(c => c.Id == id);
+
+            if (car == null)
+            {
+                return false;
+            }
+
+
+            //zapomnqm novite parametri po kolata 
+            car.Brand = brand;
+            car.Model = model;
+            car.Description = description;
+            car.ImageUrl = imageUrl;
+            car.Year = year;
+            car.CategoryId = categoryId;      
+
+            //zapametqvam promenite
+            data.SaveChanges();
+
+            return true;
+        }
+
+        public bool IsByDealer(int carId, int dealerId)
+        {
+           return data
+                .Cars
+                .Any(c => c.Id == carId && c.DealerId == dealerId);
         }
     }
 }
