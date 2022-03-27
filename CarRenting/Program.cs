@@ -1,4 +1,5 @@
 using CarRenting.Data;
+using CarRenting.Data.Models;
 using CarRenting.Infrastructure;
 using CarRenting.Services.Cars;
 using CarRenting.Services.Dealers;
@@ -17,7 +18,7 @@ builder.Services.AddDbContext<CarRentingDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+builder.Services.AddDefaultIdentity<User>(options => 
 {
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = false;
@@ -26,6 +27,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
 })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<CarRentingDbContext>();
 
 builder.Services.AddControllersWithViews();

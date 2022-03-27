@@ -26,6 +26,12 @@
         {
             public const int CategoryNameMaxLength = 30;
         }
+
+        public class User
+        {
+            public const int FullNameMinLength = 3;
+            public const int FullNameMaxLength = 30;
+        }
         
     }
 }

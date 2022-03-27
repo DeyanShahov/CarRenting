@@ -1,26 +1,20 @@
-﻿using CarRenting.Data;
-using CarRenting.Data.Models;
-using CarRenting.Infrastructure;
+﻿using CarRenting.Infrastructure;
 using CarRenting.Models.Cars;
 using CarRenting.Services.Cars;
 using CarRenting.Services.Dealers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace CarRenting.Controllers
 {
     public class CarsController : Controller
     {
-        private readonly CarRentingDbContext data;
-
         private readonly IDealerService dealerSevice;
 
         private readonly ICarSevice carSevice;
 
-        public CarsController(ICarSevice carSevice, CarRentingDbContext data, IDealerService dealerSevice)
+        public CarsController(ICarSevice carSevice, IDealerService dealerSevice)
         {
-            this.data = data;
             this.carSevice = carSevice;
             this.dealerSevice = dealerSevice;
         }
@@ -70,7 +64,6 @@ namespace CarRenting.Controllers
             //return RedirectToAction("Index", "Home");        
             return RedirectToAction(nameof(All));
         }
-
 
         public IActionResult All([FromQuery] AllCarsQueryModel query)
         {
