@@ -1,7 +1,9 @@
 ﻿using CarRenting.Data;
 using CarRenting.Data.Models;
+using CarRenting.Infrastructure;
 using CarRenting.Models.Cars;
 using CarRenting.Services.Cars;
+using CarRenting.Services.Dealers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -12,26 +14,29 @@ namespace CarRenting.Controllers
     {
         private readonly CarRentingDbContext data;
 
+        private readonly IDealerService dealerSevice;
+
         private readonly ICarSevice carSevice;
 
-        public CarsController(ICarSevice carSevice, CarRentingDbContext data)
+        public CarsController(ICarSevice carSevice, CarRentingDbContext data, IDealerService dealerSevice)
         {
             this.data = data;
             this.carSevice = carSevice;
+            this.dealerSevice = dealerSevice;
         }
 
         [Authorize]
         public IActionResult Add()
         {
-            if (!UserIsDealer())
+            if (!dealerSevice.IsDealer(User.GetId()))
             {
                 return RedirectToAction(nameof(DealersController.Become), "Dealers");
             }
 
             return View(new AddCarFormModel
             {
-                Categories = this.GetCarCategories()
-            });
+                Categories = this.carSevice.AllCarCategories()
+            }); ;
         }
 
         [HttpPost]
@@ -44,7 +49,7 @@ namespace CarRenting.Controllers
                 .Select(d => d.Id)
                 .FirstOrDefault();
 
-            if (!UserIsDealer())
+            if (!dealerSevice.IsDealer(User.GetId()))
             {
                 return RedirectToAction(nameof(DealersController.Become), "Dealers");
             }
@@ -58,7 +63,7 @@ namespace CarRenting.Controllers
 
             if (!ModelState.IsValid)
             {
-                carModel.Categories = this.GetCarCategories();
+                carModel.Categories = this.carSevice.AllCarCategories();
 
                 return View(carModel);
             }
@@ -102,28 +107,20 @@ namespace CarRenting.Controllers
             return View(query);
         }
 
-        private IEnumerable<CarCategoryViewModel> GetCarCategories()
+
+        [Authorize]
+        public IActionResult Mine()
         {
-            return this.data
-                    .Categories
-                    .Select(c => new CarCategoryViewModel
-                    {
-                        Id = c.Id,
-                        Name = c.Name,
-                    })
-                    .ToList();
+            var myCars = carSevice.ByUser(this.User.GetId());
+
+            return View(myCars);
         }
 
-
-        private bool UserIsDealer()
+        [Authorize]
+        public IActionResult Edit()
         {
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var userIsDealer = data
-                .Dealers
-                .Any(d => d.UserId == userId);
-
-            return userIsDealer;
         }
+
     }
 }

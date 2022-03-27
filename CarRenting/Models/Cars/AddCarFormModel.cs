@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CarRenting.Services.Cars;
+using System.ComponentModel.DataAnnotations;
 using static CarRenting.Data.DataConstants.Car;
 
 namespace CarRenting.Models.Cars
@@ -28,6 +29,6 @@ namespace CarRenting.Models.Cars
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
 
-        public IEnumerable<CarCategoryViewModel>? Categories { get; set; }
+        public IEnumerable<CarCategoryServiceModel>? Categories { get; set; }
     }
 }

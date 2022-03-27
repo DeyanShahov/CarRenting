@@ -1,4 +1,5 @@
 ﻿using CarRenting.Data;
+using CarRenting.Data.Models;
 using CarRenting.Models.Cars;
 
 namespace CarRenting.Services.Cars
@@ -40,19 +41,10 @@ namespace CarRenting.Services.Cars
 
             var totalCars = carsQuery.Count();
 
-            var cars = carsQuery
+            var cars = GetCars(carsQuery
                 .Skip((currentPage - 1) * carsPerPage)
-                .Take(carsPerPage)
-                .Select(c => new CarServiceModel
-                {
-                    Id = c.Id,
-                    Brand = c.Brand,
-                    Model = c.Model,
-                    Year = c.Year,
-                    ImageUrl = c.ImageUrl,
-                    Category = c.Category.Name
-                })
-                .ToList();
+                .Take(carsPerPage));
+                
 
             return new CarQueryServiceModel
             {
@@ -71,6 +63,40 @@ namespace CarRenting.Services.Cars
                 .Distinct()
                 .OrderBy(br => br)
                 .ToList();
+        }
+
+        public IEnumerable<CarServiceModel> ByUser(string userId)
+        {
+            return GetCars(this.data
+                .Cars
+                .Where(c => c.Dealer.UserId == userId));
+        }
+
+        private static IEnumerable<CarServiceModel> GetCars(IQueryable<Car> carQery)
+        {
+            return carQery
+                .Select(c => new CarServiceModel
+                {
+                    Id = c.Id,
+                    Brand = c.Brand,
+                    Model = c.Model,
+                    Year = c.Year,
+                    ImageUrl = c.ImageUrl,
+                    Category = c.Category.Name
+                })
+                .ToList();
+        }
+
+        public IEnumerable<CarCategoryServiceModel> AllCarCategories()
+        {
+            return this.data
+                    .Categories
+                    .Select(c => new CarCategoryServiceModel
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                    })
+                    .ToList();
         }
     }
 }

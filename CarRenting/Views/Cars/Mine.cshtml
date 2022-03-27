@@ -1,0 +1,14 @@
+﻿@model IEnumerable<CarServiceModel>
+
+@{
+    ViewData["Title"] = "My Cars";
+    ViewBag.AllowCarEdit = true;
+}
+
+
+@if (!Model.Any())
+{
+    <h2 class="text-center">No cars found</h2>
+}
+
+<partial name="_CarsPartial" model="@Model" />
