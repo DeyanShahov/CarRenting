@@ -97,16 +97,16 @@ namespace CarRenting.Controllers
         {
             var userId = User.GetId();
 
-            // proverka dali smeDilari vaobshte
-            if (!dealerSevice.IsDealer(userId))
+            // proverka dali smeDilari vaobshte ili ne si admin
+            if (!dealerSevice.IsDealer(userId) && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(DealersController.Become), "Dealers");
             }
 
             var car = carSevice.Details(id);
 
-            // proverka dali dadenata kola e moq za da moga da q promenqm
-            if (car.UserId != userId)
+            // proverka dali dadenata kola e moq za da moga da q promenqm ili ne si admin
+            if (car.UserId != userId && !User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -129,8 +129,8 @@ namespace CarRenting.Controllers
         {
             var dealerId = this.dealerSevice.GetIdByUser(User.GetId());
 
-            //proverka dali e dilar potrebitelq
-            if (!dealerSevice.IsDealer(User.GetId()))
+            //proverka dali e dilar potrebitelq ili ne e admin
+            if (dealerId == 0 && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(DealersController.Become), "Dealers");
             }
@@ -150,7 +150,7 @@ namespace CarRenting.Controllers
             }
 
             //proverka dali dilara ima pravo da promenq tochno tazi kola, tq ot neegovite koli li e ?
-            if (!carSevice.IsByDealer(id, dealerId))
+            if (!carSevice.IsByDealer(id, dealerId) && !User.IsAdmin())
             {
                 return BadRequest();
             }
