@@ -42,6 +42,9 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
 });
 
+// Add AtoMapper to work
+builder.Services.AddAutoMapper(typeof(Program));
+
 
 var app = builder.Build();
 
@@ -69,7 +72,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "Admin",
+    name: "Areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.UseEndpoints(endpoints =>

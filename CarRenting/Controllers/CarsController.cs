@@ -1,4 +1,5 @@
-﻿using CarRenting.Infrastructure;
+﻿using AutoMapper;
+using CarRenting.Infrastructure;
 using CarRenting.Models.Cars;
 using CarRenting.Services.Cars;
 using CarRenting.Services.Dealers;
@@ -13,10 +14,13 @@ namespace CarRenting.Controllers
 
         private readonly ICarSevice carSevice;
 
-        public CarsController(ICarSevice carSevice, IDealerService dealerSevice)
+        private readonly IMapper mapper;
+
+        public CarsController(ICarSevice carSevice, IDealerService dealerSevice, IMapper mapper)
         {
             this.carSevice = carSevice;
             this.dealerSevice = dealerSevice;
+            this.mapper = mapper;
         }
 
         [Authorize]
@@ -111,16 +115,24 @@ namespace CarRenting.Controllers
                 return Unauthorized();
             }
 
-            return View(new CarFormModel
-            {
-                Brand = car.Brand,
-                Model = car.Model,
-                Description = car.Description,
-                ImageUrl = car.ImageUrl,
-                Year = car.Year,
-                CategoryId = car.CategoryId,        
-                Categories = this.carSevice.AllCarCategories()
-            });
+            //Mapping using AutoMapper
+            var carForm = mapper.Map<CarFormModel>(car);
+
+            carForm.Categories = carSevice.AllCarCategories();
+
+            return View(carForm);
+
+            //Standart maping objeckts
+            //return View(new CarFormModel
+            //{
+            //    Brand = car.Brand,
+            //    Model = car.Model,
+            //    Description = car.Description,
+            //    ImageUrl = car.ImageUrl,
+            //    Year = car.Year,
+            //    CategoryId = car.CategoryId,        
+            //    Categories = this.carSevice.AllCarCategories()
+            //});
         }
 
         [HttpPost]

@@ -1,4 +1,6 @@
-﻿using CarRenting.Data;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CarRenting.Data;
 using CarRenting.Data.Models;
 using CarRenting.Models.Cars;
 
@@ -7,10 +9,12 @@ namespace CarRenting.Services.Cars
     public class CarService : ICarSevice
     {
         private readonly CarRentingDbContext data;
+        private readonly IMapper mapper;
 
-        public CarService(CarRentingDbContext data)
+        public CarService(CarRentingDbContext data, IMapper mapper)
         {
             this.data = data;
+            this.mapper = mapper;
         }
 
         public CarQueryServiceModel All(string brand, string searchTerm, CarSorting sorting, int currentPage,
@@ -104,20 +108,22 @@ namespace CarRenting.Services.Cars
             return data
                 .Cars
                 .Where(c => c.Id == id)
-                .Select(c => new CarDetailsServiceModel
-                {
-                    Id = c.Id,
-                    Brand = c.Brand,
-                    Model = c.Model,
-                    Year = c.Year,
-                    ImageUrl = c.ImageUrl,
-                    CategoryName = c.Category.Name,
-                    Description = c.Description,
-                    DealerId = c.DealerId,
-                    DealerName = c.Dealer.Name,
-                    UserId = c.Dealer.UserId
+                .ProjectTo<CarDetailsServiceModel>(mapper.ConfigurationProvider)
+                //.Select(c => new CarDetailsServiceModel
+                //{
+                //    Id = c.Id,
+                //    Brand = c.Brand,
+                //    Model = c.Model,
+                //    Year = c.Year,
+                //    ImageUrl = c.ImageUrl,
+                //    CategoryId = c.Category.Id,
+                //    CategoryName = c.Category.Name,
+                //    Description = c.Description,
+                //    DealerId = c.DealerId,
+                //    DealerName = c.Dealer.Name,
+                //    UserId = c.Dealer.UserId
 
-                })
+                //})
                 .FirstOrDefault();
         }
 
