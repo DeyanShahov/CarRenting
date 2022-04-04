@@ -1,6 +1,4 @@
-﻿using CarRenting.Data;
-using CarRenting.Models.Api;
-using CarRenting.Services.Statistics;
+﻿using CarRenting.Services.Statistics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRenting.Controllers.Api

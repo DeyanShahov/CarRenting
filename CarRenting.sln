@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRenting", "CarRenting\CarRenting.csproj", "{54A911CE-2D9D-4FD7-8110-C893EBBA8D1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRenting", "CarRenting\CarRenting.csproj", "{54A911CE-2D9D-4FD7-8110-C893EBBA8D1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRenting.Tests", "CarRenting.Tests\CarRenting.Tests.csproj", "{F7711F21-B77B-4CD4-BB26-B3E10C93B1F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{54A911CE-2D9D-4FD7-8110-C893EBBA8D1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54A911CE-2D9D-4FD7-8110-C893EBBA8D1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54A911CE-2D9D-4FD7-8110-C893EBBA8D1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7711F21-B77B-4CD4-BB26-B3E10C93B1F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7711F21-B77B-4CD4-BB26-B3E10C93B1F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7711F21-B77B-4CD4-BB26-B3E10C93B1F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7711F21-B77B-4CD4-BB26-B3E10C93B1F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
