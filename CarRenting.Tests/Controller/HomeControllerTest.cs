@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using CarRenting.Controllers;
+﻿using CarRenting.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using Xunit;
 
 namespace CarRenting.Tests.Controller
@@ -12,7 +10,7 @@ namespace CarRenting.Tests.Controller
         public void ErrorShouldReturnView()
         {
             //Arange
-            var homeController = new HomeController(null, null, Mock.Of<IMapper>());
+            var homeController = new HomeController(null, null);
 
             //Act
             var result = homeController.Error();

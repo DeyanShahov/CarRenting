@@ -11,6 +11,8 @@ namespace CarRenting.Services.Cars
             int currentPage,
             int carsPerPage);
 
+        IEnumerable<LatestCarServiceModel> Latest();
+
         CarDetailsServiceModel Details(int carId);
 
         IEnumerable<CarServiceModel> ByUser(string userId);

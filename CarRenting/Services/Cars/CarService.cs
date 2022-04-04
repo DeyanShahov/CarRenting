@@ -183,5 +183,24 @@ namespace CarRenting.Services.Cars
                 .Cars
                 .Any(c => c.Id == carId && c.DealerId == dealerId);
         }
+
+        public IEnumerable<LatestCarServiceModel> Latest()
+        {
+           return this.data
+                .Cars
+                .OrderByDescending(c => c.Id)
+                .ProjectTo<LatestCarServiceModel>(mapper.ConfigurationProvider)
+                //.Select(c => new CarIndexViewModel
+                //{
+                //    Id = c.Id,
+                //    Brand = c.Brand,
+                //    Model = c.Model,
+                //    Year = c.Year,
+                //    Description = c.Description,
+                //    ImageUrl = c.ImageUrl
+                //})
+                .Take(3)
+                .ToList();
+        }
     }
 }

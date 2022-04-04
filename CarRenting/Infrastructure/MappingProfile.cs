@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CarRenting.Data.Models;
 using CarRenting.Models.Cars;
-using CarRenting.Models.Home;
 using CarRenting.Services.Cars;
 
 namespace CarRenting.Infrastructure
@@ -14,7 +13,7 @@ namespace CarRenting.Infrastructure
             CreateMap<CarDetailsServiceModel, CarFormModel>();
 
             //mapping in lambda Select ....
-            CreateMap<Car, CarIndexViewModel>();
+            CreateMap<Car, LatestCarServiceModel>();
 
             //mapping with differents properties
             CreateMap<Car, CarDetailsServiceModel>()
