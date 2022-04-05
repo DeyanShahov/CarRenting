@@ -21,6 +21,9 @@ namespace CarRenting.Controllers
         {
             const string latestCarsCacheKey = "LatestCarsCaheKey";
 
+            //Add sesion information from current user
+            this.HttpContext.Session.SetString("KeyParameter", "ValueParameter");
+
             var latestCars = cache.Get<List<LatestCarServiceModel>>(latestCarsCacheKey);
 
             if (latestCars == null)

@@ -52,6 +52,15 @@ builder.Services.AddAutoMapper(typeof(Program));
 //Add InMemory cashing
 builder.Services.AddMemoryCache();
 
+//Add sesion
+builder.Services.AddSession(option =>
+{
+    option.IdleTimeout = TimeSpan.FromSeconds(10);
+    //XSS security
+    option.Cookie.HttpOnly = true;
+});
+
+
 
 var app = builder.Build();
 
@@ -77,6 +86,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "Areas",
