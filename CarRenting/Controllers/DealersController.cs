@@ -4,6 +4,7 @@ using CarRenting.Models.Dealers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static CarRenting.WebConstants;
 
 namespace CarRenting.Controllers
 {
@@ -52,6 +53,9 @@ namespace CarRenting.Controllers
             data.Dealers.Add(dealerData);
 
             data.SaveChanges();
+
+
+            this.TempData[GlobalMessageKey] = "Thank you for becomming a dealer!";
 
             return RedirectToAction("All", "Cars");
         }

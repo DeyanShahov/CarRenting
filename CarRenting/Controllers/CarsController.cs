@@ -65,6 +65,9 @@ namespace CarRenting.Controllers
             carSevice.Create(carModel.Brand, carModel.Model, carModel.Description,
                 carModel.ImageUrl, carModel.Year, carModel.CategoryId, dealerId);
 
+            //Add TempData
+            TempData[WebConstants.GlobalMessageKey] = "You car was added";
+
             //return RedirectToAction("Index", "Home");        
             return RedirectToAction(nameof(All));
         }
@@ -170,7 +173,11 @@ namespace CarRenting.Controllers
             carSevice.Edit(id, carModel.Brand, carModel.Model, carModel.Description,
                 carModel.ImageUrl, carModel.Year, carModel.CategoryId);
 
-          
+
+            //Add TempData
+            TempData[WebConstants.GlobalMessageKey] = "You car was edited successfully!";
+
+
             return RedirectToAction(nameof(All));
         }
 
