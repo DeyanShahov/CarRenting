@@ -1,10 +1,5 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using CarRenting.Data;
-using CarRenting.Models;
-using CarRenting.Models.Home;
+﻿using CarRenting.Models;
 using CarRenting.Services.Cars;
-using CarRenting.Services.Statistics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
@@ -14,13 +9,10 @@ namespace CarRenting.Controllers
     public class HomeController : Controller
     {
         private readonly ICarSevice carsService;
-        private readonly IStatisticsService statistics;
         private readonly IMemoryCache cache;
 
-        public HomeController(IStatisticsService statistics, ICarSevice carsService, IMemoryCache cache)
+        public HomeController(ICarSevice carsService, IMemoryCache cache)
         {
-
-            this.statistics = statistics;
             this.carsService = carsService;
             this.cache = cache;
         }
@@ -39,16 +31,9 @@ namespace CarRenting.Controllers
                     .SetAbsoluteExpiration(TimeSpan.FromSeconds(5));
 
                 this.cache.Set(latestCarsCacheKey, latestCars, cacheOption);
-            }
-          
-            var totalStatistics = statistics.Total();
+            }       
 
-            return View(new IndexViewModel
-            {
-                TotalCars = totalStatistics.TotalCars,
-                TotalUsers = totalStatistics.TotalUsers,
-                Cars = latestCars
-            });
+            return View(latestCars);
         }
 
 
