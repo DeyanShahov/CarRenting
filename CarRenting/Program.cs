@@ -40,6 +40,7 @@ builder.Services
     .AddTransient<ICarSevice, CarService>()
     .AddTransient<IDealerService, DealerService>();
 
+//Add forgery security
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
@@ -47,6 +48,9 @@ builder.Services.AddControllersWithViews(options =>
 
 // Add AtoMapper to work
 builder.Services.AddAutoMapper(typeof(Program));
+
+//Add InMemory cashing
+builder.Services.AddMemoryCache();
 
 
 var app = builder.Build();
