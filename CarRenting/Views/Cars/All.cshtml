@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "All Cars";
+    ViewData["ShowIndicator"] = false;
 }
 
 <form method="get">
@@ -77,5 +78,5 @@
     <h2 class="text-center">No cars found</h2>
 }
 
-<partial name="_CarsPartial" model="@Model.Cars" />
+<partial name="_CarsPartial" model="@Model.Cars" view-data="ViewData" />
 

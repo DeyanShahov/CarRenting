@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<CarServiceModel>
 
+@{
+    var showIndicator = (bool)ViewData["ShowIndicator"];
+}
+
 <div class="row">
     @foreach (var car in Model)
     {
@@ -12,8 +16,12 @@
                     <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" asp-route-information="@car.ToFriendlyUrl()" class="btn btn-primary">View</a>
                     @if (ViewBag.AllowCarEdit == true || User.IsAdmin())
                     {
-                       <a asp-controller="Cars" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
-                       <a asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger">Delete</a>
+                        <a asp-controller="Cars" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
+                        <a asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger">Delete</a>
+                    }
+                    @if (!User.IsAdmin() && showIndicator)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle p-2 bg-@(car.IsPublic ? "success" : "danger") border border-light rounded-circle"></span>
                     }
                 </div>
             </div>

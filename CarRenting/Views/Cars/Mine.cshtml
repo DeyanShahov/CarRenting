@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "My Cars";
     ViewBag.AllowCarEdit = true;
+    ViewData["ShowIndicator"] = true;
 }
 
 
@@ -11,4 +12,4 @@
     <h2 class="text-center">No cars found</h2>
 }
 
-<partial name="_CarsPartial" model="@Model" />
+<partial name="_CarsPartial" model="@Model" view-data="ViewData" />
