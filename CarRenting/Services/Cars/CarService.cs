@@ -20,7 +20,8 @@ namespace CarRenting.Services.Cars
         public CarQueryServiceModel All(string brand, string searchTerm, CarSorting sorting, int currentPage,
             int carsPerPage)
         {
-            var carsQuery = data.Cars.AsQueryable();
+            var carsQuery = data.Cars
+                .Where(c => c.IsPublic);
 
             if (!string.IsNullOrWhiteSpace(brand))
             {
@@ -143,6 +144,7 @@ namespace CarRenting.Services.Cars
                 Year = year,
                 CategoryId = categoryId,
                 DealerId = dealerId,
+                IsPublic = false
             };
 
             data.Cars.Add(car);
@@ -169,7 +171,8 @@ namespace CarRenting.Services.Cars
             car.Description = description;
             car.ImageUrl = imageUrl;
             car.Year = year;
-            car.CategoryId = categoryId;      
+            car.CategoryId = categoryId;
+            car.IsPublic = false;
 
             //zapametqvam promenite
             data.SaveChanges();
@@ -188,6 +191,7 @@ namespace CarRenting.Services.Cars
         {
            return this.data
                 .Cars
+                .Where(c => c.IsPublic)
                 .OrderByDescending(c => c.Id)
                 .ProjectTo<LatestCarServiceModel>(mapper.ConfigurationProvider)
                 //.Select(c => new CarIndexViewModel

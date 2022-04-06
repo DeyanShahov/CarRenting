@@ -62,14 +62,14 @@ namespace CarRenting.Controllers
                 return View(carModel);
             }
 
-            carSevice.Create(carModel.Brand, carModel.Model, carModel.Description,
+            var carId = carSevice.Create(carModel.Brand, carModel.Model, carModel.Description,
                 carModel.ImageUrl, carModel.Year, carModel.CategoryId, dealerId);
 
             //Add TempData
-            TempData[WebConstants.GlobalMessageKey] = "You car was added";
+            TempData[WebConstants.GlobalMessageKey] = "You car was added and is awaiting for approval!";
 
-            //return RedirectToAction("Index", "Home");        
-            return RedirectToAction(nameof(All));
+            //return RedirectToAction();        
+            return RedirectToAction(nameof(Details), new { id = carId, information = carModel.ToFriendlyUrl()});
         }
 
         public IActionResult All([FromQuery] AllCarsQueryModel query)
@@ -189,10 +189,11 @@ namespace CarRenting.Controllers
 
 
             //Add TempData
-            TempData[WebConstants.GlobalMessageKey] = "You car was edited successfully!";
+            TempData[WebConstants.GlobalMessageKey] = "You car was edited and is awaiting for approval!";
 
 
-            return RedirectToAction(nameof(All));
+            //return RedirectToAction();        
+            return RedirectToAction(nameof(Details), new { id, information = carModel.ToFriendlyUrl() });
         }
 
      

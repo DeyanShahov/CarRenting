@@ -31,5 +31,7 @@ namespace CarRenting.Data.Models
         public int DealerId { get; init; }
 
         public Dealer Dealer { get; init; }
+
+        public bool IsPublic { get; set; }
     }
 }
