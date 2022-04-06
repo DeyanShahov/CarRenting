@@ -1,6 +1,6 @@
 using CarRenting.Data;
 using CarRenting.Data.Models;
-using CarRenting.Infrastructure;
+using CarRenting.Infrastructure.Extensions;
 using CarRenting.Services.Cars;
 using CarRenting.Services.Dealers;
 using CarRenting.Services.Statistics;

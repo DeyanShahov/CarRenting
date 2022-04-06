@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CarRenting.Infrastructure;
+using CarRenting.Infrastructure.Extensions;
 using CarRenting.Models.Cars;
 using CarRenting.Services.Cars;
 using CarRenting.Services.Dealers;
@@ -185,18 +185,17 @@ namespace CarRenting.Controllers
             }
 
             carSevice.Edit(id, carModel.Brand, carModel.Model, carModel.Description,
-                carModel.ImageUrl, carModel.Year, carModel.CategoryId);
+                carModel.ImageUrl, carModel.Year, carModel.CategoryId, this.User.IsAdmin());
 
 
             //Add TempData
-            TempData[WebConstants.GlobalMessageKey] = "You car was edited and is awaiting for approval!";
+            TempData[WebConstants.GlobalMessageKey] = $"You car was edited{(User.IsAdmin() ? string.Empty : " and is awaiting for approval")}!";
 
 
             //return RedirectToAction();        
             return RedirectToAction(nameof(Details), new { id, information = carModel.ToFriendlyUrl() });
         }
 
-     
-
+    
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace CarRenting.Infrastructure
+namespace CarRenting.Infrastructure.Extensions
 {
     public static class ClaimsPrincipalExtensions
     {

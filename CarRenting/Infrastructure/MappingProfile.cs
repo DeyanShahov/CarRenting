@@ -11,6 +11,8 @@ namespace CarRenting.Infrastructure
         {
             //standart mapping
             CreateMap<CarDetailsServiceModel, CarFormModel>();
+            CreateMap<Category, CarCategoryServiceModel>();
+            
 
             //mapping in lambda Select ....
             CreateMap<Car, LatestCarServiceModel>();
@@ -18,6 +20,9 @@ namespace CarRenting.Infrastructure
             //mapping with differents properties
             CreateMap<Car, CarDetailsServiceModel>()
                 .ForMember(c => c.UserId, cfg => cfg.MapFrom(c => c.Dealer.UserId))
+                .ForMember(c => c.CategoryName, cfg => cfg.MapFrom(c => c.Category.Name));
+
+            CreateMap<Car, CarServiceModel>()
                 .ForMember(c => c.CategoryName, cfg => cfg.MapFrom(c => c.Category.Name));
         }
     }

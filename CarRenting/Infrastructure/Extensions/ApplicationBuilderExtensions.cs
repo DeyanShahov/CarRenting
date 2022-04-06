@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 using static CarRenting.WebConstants;
 
-namespace CarRenting.Infrastructure
+namespace CarRenting.Infrastructure.Extensions
 {
     public static class ApplicationBuilderExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using CarRenting.Services.Cars;
 
-namespace CarRenting.Infrastructure
+namespace CarRenting.Infrastructure.Extensions
 {
     public static class ModelExtensions
     {

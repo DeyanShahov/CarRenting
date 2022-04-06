@@ -1,12 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CarRenting.Services.Cars;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarRenting.Areas.Admin.Controllers
 {
     public class CarsController : AdminController
     {
-        public IActionResult Index()
+        private readonly ICarSevice carsService;
+
+        public CarsController(ICarSevice carsService)
         {
-            return View();
+            this.carsService = carsService;
+        }
+
+        public IActionResult All()
+        {
+            var cars = carsService
+                .All(publicOnly: false)
+                .Cars;
+
+            return View(cars);
+        }
+
+        public IActionResult ChangeVisibility(int id)
+        {
+            carsService.ChangeVisibility(id);
+
+            return RedirectToAction(nameof(All));
         }
     }
 }

@@ -17,11 +17,16 @@ namespace CarRenting.Services.Cars
             this.mapper = mapper;
         }
 
-        public CarQueryServiceModel All(string brand, string searchTerm, CarSorting sorting, int currentPage,
-            int carsPerPage)
+        public CarQueryServiceModel All(
+            string brand = null,
+            string searchTerm = null,
+            CarSorting sorting = CarSorting.DateCreated,
+            int currentPage = 1,
+            int carsPerPage = int.MaxValue,
+            bool publicOnly = true)
         {
             var carsQuery = data.Cars
-                .Where(c => c.IsPublic);
+                .Where(c => !publicOnly || c.IsPublic);
 
             if (!string.IsNullOrWhiteSpace(brand))
             {
@@ -77,30 +82,16 @@ namespace CarRenting.Services.Cars
                 .Where(c => c.Dealer.UserId == userId));
         }
 
-        private static IEnumerable<CarServiceModel> GetCars(IQueryable<Car> carQery)
-        {
-            return carQery
-                .Select(c => new CarServiceModel
-                {
-                    Id = c.Id,
-                    Brand = c.Brand,
-                    Model = c.Model,
-                    Year = c.Year,
-                    ImageUrl = c.ImageUrl,
-                    CategoryName = c.Category.Name
-                })
-                .ToList();
-        }
-
         public IEnumerable<CarCategoryServiceModel> AllCarCategories()
         {
             return this.data
                     .Categories
-                    .Select(c => new CarCategoryServiceModel
-                    {
-                        Id = c.Id,
-                        Name = c.Name,
-                    })
+                    .ProjectTo<CarCategoryServiceModel>(mapper.ConfigurationProvider)
+                    //.Select(c => new CarCategoryServiceModel
+                    //{
+                    //    Id = c.Id,
+                    //    Name = c.Name,
+                    //})
                     .ToList();
         }
 
@@ -154,7 +145,7 @@ namespace CarRenting.Services.Cars
             return car.Id;
         }
 
-        public bool Edit(int id, string brand, string model, string description, string imageUrl, int year, int categoryId)
+        public bool Edit(int id, string brand, string model, string description, string imageUrl, int year, int categoryId, bool isPublic)
         {
             //namiram kolata v bazata po podadenoto id
             var car = data.Cars.FirstOrDefault(c => c.Id == id);
@@ -172,7 +163,7 @@ namespace CarRenting.Services.Cars
             car.ImageUrl = imageUrl;
             car.Year = year;
             car.CategoryId = categoryId;
-            car.IsPublic = false;
+            car.IsPublic = isPublic;
 
             //zapametqvam promenite
             data.SaveChanges();
@@ -204,6 +195,34 @@ namespace CarRenting.Services.Cars
                 //    ImageUrl = c.ImageUrl
                 //})
                 .Take(3)
+                .ToList();
+        }
+
+        public void ChangeVisibility(int carId)
+        {
+            var car = data.Cars.Find(carId);
+
+            car.IsPublic = !car.IsPublic;
+
+            data.SaveChanges();
+        }
+
+
+
+        private IEnumerable<CarServiceModel> GetCars(IQueryable<Car> carQery)
+        {
+            return carQery
+                .ProjectTo<CarServiceModel>(mapper.ConfigurationProvider)
+                //.Select(c => new CarServiceModel
+                //{
+                //    Id = c.Id,
+                //    Brand = c.Brand,
+                //    Model = c.Model,
+                //    Year = c.Year,
+                //    ImageUrl = c.ImageUrl,
+                //    CategoryName = c.Category.Name,
+                //    IsPublic = c.IsPublic
+                //})
                 .ToList();
         }
     }
