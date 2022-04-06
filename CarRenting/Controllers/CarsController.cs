@@ -100,6 +100,20 @@ namespace CarRenting.Controllers
         }
 
     
+        [Authorize]
+        public IActionResult Details(int id, string information)
+        {
+            var car = carSevice.Details(id);
+
+            if(information != car.ToFriendlyUrl())
+            {
+                return BadRequest();
+            }
+
+            return View(car);
+        }
+
+
         public IActionResult Edit(int id)
         {
             var userId = User.GetId();

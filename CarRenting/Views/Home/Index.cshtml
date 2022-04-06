@@ -37,7 +37,7 @@
             <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
                 <img src="@car.ImageUrl" class="d-block w-100" alt="@car.Brand @car.Model">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5><a class="btn btn-primary" asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" asp-route-information="@(car.Brand + " " + @car.Model)">@car.Year @car.Brand @car.Model</a></h5>
+                    <h5><a class="btn btn-primary" asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" asp-route-information="@car.ToFriendlyUrl()">@car.Year @car.Brand @car.Model</a></h5>
                 </div>
             </div>
         }
